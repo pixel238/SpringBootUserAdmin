@@ -1,10 +1,10 @@
-package com.tavisca.SpringBootAppUserAdmin;
+package com.tavisca.springapplication;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringBootAppUserAdminApplicationTests {
+class SpringApplicationTests {
 
 	@Test
 	void contextLoads() {

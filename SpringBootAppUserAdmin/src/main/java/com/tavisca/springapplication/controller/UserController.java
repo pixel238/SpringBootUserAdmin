@@ -1,6 +1,7 @@
 package com.tavisca.springapplication.controller;
 
 import com.tavisca.springapplication.exception.RequestUserNotFoundException;
+import com.tavisca.springapplication.helper.UserHelper;
 import com.tavisca.springapplication.model.User;
 import com.tavisca.springapplication.repository.UserRepository;
 import org.slf4j.Logger;
@@ -38,7 +39,27 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<?> addUsers(@RequestBody User user){
-        this.userRepository.save(user);
+        User completeUser = UserHelper.createUser(user);
+        this.userRepository.save(completeUser);
         return new ResponseEntity<>("Inserted", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id){
+        Optional<User> byId = this.userRepository.findById(id);
+        if(byId.isPresent()){
+            this.userRepository.deleteById(id);
+            return new ResponseEntity<>("Deleted",HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>("No User Found "+id,HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/user/edit/{username}")
+    public ResponseEntity<?>update(@PathVariable String username,@RequestBody User newUser){
+        User oldUser = this.userRepository.findByUserName(username);
+        User updatedUser = UserHelper.copyUserDetails(oldUser,newUser);
+        this.userRepository.save(newUser);
+        return new ResponseEntity<>("Done",HttpStatus.OK);
     }
 }

@@ -6,5 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value="SELECT * FROM user WHERE username = ?1", nativeQuery= true)
-    public User findByUserName(String username);
+    public User findByUsername(String username);
+
+    @Query(value = "SElECT role FROM user WHERE username = ?1",nativeQuery = true)
+    public String getRoleOfUser(String username);
+
 }

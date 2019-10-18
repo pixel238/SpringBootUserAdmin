@@ -1,18 +1,21 @@
-package com.tavisca.springapplication.helper;
+package com.tavisca.springapplication.utility;
 
 import com.tavisca.springapplication.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 public class UserHelper {
+
+
     private static String generateUsername(String firstName, String lastName){
 
         Random random = new Random();
         int i = random.nextInt(10000);
-        //Storing it in a arrayList the number generated.
+
         ArrayList<String> list = new ArrayList<>();
 
         String username =  (firstName + lastName).length() > 10 ? (firstName + lastName).substring(0,10) + i :
@@ -58,6 +61,7 @@ public class UserHelper {
         String dob = user.getDob();
         String createdBy = user.getCreatedBy();
         int departmentId = user.getDepartmentId();
+        String role = user.getRole();
 
         String userName = generateUsername(firstName,lastName);
         String password = generatePassword(10);
@@ -66,17 +70,63 @@ public class UserHelper {
         String createdOn = simpleDateFormat.format(new Date());
 
         User finalUser = new User(firstName,lastName,dob,email,address,phoneNumber,departmentId,
-                salary,dateOfJoining,createdBy,userName,password,createdOn);
+                salary,dateOfJoining,createdBy,userName,password,createdOn,role);
 
         return finalUser;
     }
 
-    public static User copyUserDetails(User oldUser, User newUser) {
-     newUser.setUid(oldUser.getUid());
-     newUser.setCreatedBy(oldUser.getCreatedBy());
-     newUser.setSalary(oldUser.getSalary());
-     newUser.setDateOfJoining(oldUser.getDateOfJoining());
+    public static User copyUserDetails(User oldUser, User newUser, List<UserFields> list){
+        for(UserFields fields : list){
 
-     return newUser;
+            switch (fields){
+
+                case UID:
+                    oldUser.setUid(newUser.getUid());
+                    break;
+                case FIRSTNAME:
+                    oldUser.setFirstName(newUser.getFirstName());
+                    break;
+                case LASTNAME:
+                    oldUser.setLastName(newUser.getLastName());
+                    break;
+                case DOB:
+                    oldUser.setDob(newUser.getDob());
+                    break;
+                case EMAIL:
+                    oldUser.setEmail(newUser.getEmail());
+                    break;
+                case ADDRESS:
+                    oldUser.setAddress(newUser.getAddress());
+                    break;
+                case PHONENUMBER:
+                    oldUser.setPhoneNumber(newUser.getPhoneNumber());
+                    break;
+                case DEPARTMENTID:
+                    oldUser.setDepartmentId(newUser.getDepartmentId());
+                    break;
+                case SALARY:
+                    oldUser.setSalary(newUser.getSalary());
+                    break;
+                case DATEOFJOINING:
+                    oldUser.setDateOfJoining(newUser.getDateOfJoining());
+                    break;
+                case CREATEDBY:
+                    oldUser.setCreatedBy(newUser.getCreatedBy());
+                    break;
+                case USERNAME:
+                    oldUser.setUsername(newUser.getUsername());
+                    break;
+                case PASSWORD:
+                    oldUser.setPassword(newUser.getPassword());
+                    break;
+                case CREATEDON:
+                    oldUser.setCreatedOn(newUser.getCreatedOn());
+                    break;
+                case ROLE:
+                    oldUser.setRole(newUser.getRole());
+                    break;
+            }
+        }
+        return oldUser;
     }
 }

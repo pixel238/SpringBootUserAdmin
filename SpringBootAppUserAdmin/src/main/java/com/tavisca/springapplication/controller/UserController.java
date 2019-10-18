@@ -75,6 +75,9 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id,@RequestBody String username){
 
         User operatingUser = this.userRepository.findByUsername(username);
+        if(operatingUser == null)
+            return new ResponseEntity<>("You are not Allowed to Do Delete Operation", HttpStatus.FORBIDDEN);
+
         if(UserRole.canDoOperation(operatingUser,Operation.DELETE)) {
             Optional<User> userBeingDeleted = this.userRepository.findById(id);
             if (userBeingDeleted.isPresent()) {
@@ -106,8 +109,10 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable String updatingUserUsername,@RequestBody PostClassDataFormat object){
         User updatingUserOldValue = this.userRepository.findByUsername(updatingUserUsername);
         User updatingUserNewValue = object.getUser();
-
         User operatingUser = this.userRepository.findByUsername(object.getUsername());
+
+        if(operatingUser == null || updatingUserOldValue == null)
+            return new ResponseEntity<>("No Such User Found", HttpStatus.FORBIDDEN);
 
         if(UserRole.canDoOperation(operatingUser,Operation.UPDATE)){
             List<UserFields> numberOfChangedField = updatingUserOldValue.getNumberOfChangedField(updatingUserNewValue);
